@@ -9,7 +9,7 @@
 import Foundation
 
 struct Board: CustomStringConvertible {
-	var board: [[String]]
+	private var board: [[String]]
 	let size: Int
 	
 	init(size: Int) {

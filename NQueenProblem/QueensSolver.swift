@@ -32,9 +32,9 @@ func solveQueens(board: inout Board, col: Int) {
     //recursive case
     for i in 0..<board.size {
         if(board.isSafe(row: i, col: col)){
-            board.board[i][col] = "Q"
+            board.place(row: i, col: col)
             solveQueens(board: &board, col: col + 1)
-            board.board[i][col] = "-"
+            board.remove(row: i, col: col)
         }
     }
 }
@@ -53,13 +53,13 @@ func solveQueensFirst(board: inout Board, col: Int)->Bool {
     //recursive case
     for i in 0..<board.size {
         if(board.isSafe(row: i, col: col)){
-            board.board[i][col] = "Q"
+            board.place(row: i, col: col)
             
             if(solveQueensFirst(board: &board, col: col + 1)){
                 return true
             }
             
-            board.board[i][col] = "-"
+            board.remove(row: i, col: col)
         }
     }
     return false
