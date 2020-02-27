@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,5 +26,8 @@ public class Main {
         lca.root.children.get(1).children = list03;
 
         lca.printLCA(lca.root, 4, 6);
+
+        lca.readInput("input.txt");
+        lca.printNodeList();
     }
 }
