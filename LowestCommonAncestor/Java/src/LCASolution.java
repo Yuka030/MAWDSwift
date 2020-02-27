@@ -6,13 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LCASolution {
-    Node root = null;
     List<String> inputList = new ArrayList<>();
     ArrayList<Integer>[] nodeList;
+    ArrayList<Integer>[] pairsList;
 
     int numOfNodes;
     int numOfPairs;
-    int[] pairsArray;
 
     List<Integer> path1 = new ArrayList<>();
     List<Integer> path2 = new ArrayList<>();
@@ -54,6 +53,22 @@ public class LCASolution {
             nodeList[u].add(v);
             nodeList[v].add(u);
         }
+
+        numOfPairs = Integer.parseInt(inputList.get(numOfNodes));
+        pairsList = new ArrayList[numOfPairs];
+
+        // initializing
+        for (int i = 0; i <numOfPairs; i++) {
+            pairsList[i] = new ArrayList<Integer>();
+        }
+
+        for(int i = 0 ; i < numOfPairs; i++){
+            String[] edge = list.get(numOfNodes + i + 1).split(" ");
+            int v1 = Integer.parseInt(edge[0]);
+            int v2 = Integer.parseInt(edge[1]);
+            pairsList[i].add(v1);
+            pairsList[i].add(v2);
+        }
     }
 
     public void printNodeList(){
@@ -62,8 +77,17 @@ public class LCASolution {
         }
     }
 
-    public void printLCA(Node root, int v1, int v2){
+    public void printLCAAll(){
+        for(int i = 0; i < pairsList.length; i++){
+            printLCA(1, pairsList[i].get(0), pairsList[i].get(1));
+        }
+    }
+
+    private void printLCA(int root, int v1, int v2){
         int lca = -1;
+        path1.clear();
+        path2.clear();
+
         if(findPath(root, v1, path1) && findPath(root, v2, path2)){
             if(path1.isEmpty() || path2.isEmpty()){
                 System.out.println("No LCA found.");
@@ -83,18 +107,23 @@ public class LCASolution {
     }
 
 
-    private boolean findPath(Node root, int target, List<Integer> path){
-        //base case 1
-        if(root == null) return false;
-        path.add(root.val);
+    private boolean findPath(int root, int target, List<Integer> path){
+        //base case
+        if(root == target){
+            path.add(root);
+            return true;
+        }
+        if(nodeList[root].size() < 2) return false;
 
-        //base case 2
-        if(root.val == target) return true;
+        path.add(root);
 
         //recursive case
-        if(root.children != null) {
-            for (int i = 0; i < root.children.size(); i++) {
-                if (root.children.get(i) != null && findPath(root.children.get(i), target, path)) return true;
+        if(nodeList[root] != null) {
+            for (int i = 1; i < nodeList[root].size(); i++) {
+                if(root == 1){
+                    if (nodeList[root].get(i - 1) != null && findPath(nodeList[root].get(i - 1), target, path)) return true;
+                }
+                if (nodeList[root].get(i) != null && findPath(nodeList[root].get(i), target, path)) return true;
             }
         }
 
